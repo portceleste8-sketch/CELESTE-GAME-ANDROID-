@@ -143,3 +143,54 @@ Celeste/
 - ETAPA 3: Implementar serviços de plataforma (IPlatformPaths, ILogSystem, etc.)
 - ETAPA 4: Adaptar estrutura de Content.zip
 - Essas interfaces podem desbloquear os builds após implementação
+
+## ETAPA 3 - Serviços de Plataforma + Paths + LogSystem
+
+### Ações Realizadas
+1. **3.1** - Criadas interfaces de serviço:
+   - `IPlatformPaths`: Abstração de caminhos (Desktop vs Android)
+   - `ILogSystem`: Sistema de logging centralizado
+   - `IAssetLocator`: Localização e validação de assets
+   
+2. **3.2** - Implementações concretas:
+   - `DesktopPlatformPaths`: Paths para desenvolvimento
+   - `LogSystemImpl`: Sistema de logs com estrutura por data
+   - `AssetLocatorImpl`: Validação CheckContent + carregamento
+
+3. **3.3** - Service Locator:
+   - `ServiceLocator`: Centraliza injeção de dependências
+   - Acessível globalmente via métodos estáticos
+
+4. **3.4** - Content Manager customizado:
+   - `ExternalFileContentManager`: Carrega XNBs do filesystem
+   - Mantém compatibilidade com `Engine.Instance.Content.Load<T>()`
+   
+5. **3.5** - Integração FMOD:
+   - Copiadas libs nativas: `libfmod.so` e `libfmodstudio.so` (arm64-v8a)
+   - Adicionadas ao projeto Android via `NativeLibrary` ItemGroup
+   - DllImport no FMOD.Studio já aponta para "fmod" e "fmodstudio"
+
+6. **3.6** - GameActivity + CelesteGame:
+   - `GameActivity.cs`: Activity Android que hospeda MonoGame
+   - `CelesteGame.cs`: Classe Game que inicializa serviços e valida content
+   - Fullscreen imersivo configurado
+   - Landscape/Fullscreen garantido
+
+### Arquivos Criados
+- `src/Celeste.Core/Services/IPlatformPaths.cs`
+- `src/Celeste.Core/Services/ILogSystem.cs`
+- `src/Celeste.Core/Services/IAssetLocator.cs`
+- `src/Celeste.Core/Services/DesktopPlatformPaths.cs`
+- `src/Celeste.Core/Services/LogSystemImpl.cs`
+- `src/Celeste.Core/Services/AssetLocatorImpl.cs`
+- `src/Celeste.Core/Services/ServiceLocator.cs`
+- `src/Celeste.Core/Services/ExternalFileContentManager.cs`
+- `src/Celeste.Android/GameActivity.cs`
+- `src/Celeste.Android/CelesteGame.cs`
+- `src/Celeste.Android/libs/arm64-v8a/libfmod.so`
+- `src/Celeste.Android/libs/arm64-v8a/libfmodstudio.so`
+
+### Próximos Passos
+- ETAPA 4: Adaptar Engine.cs para usar IPlatformPaths
+- ETAPA 5: Criar estrutura Android (MainActivity, Flutter UI placeholder)
+- ETAPA 6: Resolver erros de compilação (Vector2.Floor etc)

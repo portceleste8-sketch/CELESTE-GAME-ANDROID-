@@ -10,11 +10,27 @@
     <!-- 64-bit only configuration -->
     <RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
   </PropertyGroup>
+  
+  <!-- FMOD libs nativas -->
+  <ItemGroup>
+    <RuntimeIdentifierOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(RuntimeIdentifier)')) == 'android'">
+      android
+    </RuntimeIdentifierOSPlatformVersion>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
     <PackageReference Include="MonoGame.Framework.Android" Version="3.8.*" />
   </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Celeste.Core\Celeste.Core.csproj" />
   </ItemGroup>
+
+  <!-- Incluir libs FMOD -->
+  <ItemGroup>
+    <NativeLibrary Include="libs/arm64-v8a/libfmod.so" />
+    <NativeLibrary Include="libs/arm64-v8a/libfmodstudio.so" />
+  </ItemGroup>
+
 </Project>
